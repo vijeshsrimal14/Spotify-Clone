@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { reducerCases } from "../utils/Constants";
-import { useStateProvider } from "../utils/StateProvider"
+import { useStateProvider } from "../utils/StateProvider";
 
 export default function Playlists() {
   const [{ token, playlists }, dispatch] = useStateProvider();
@@ -17,26 +17,28 @@ export default function Playlists() {
           },
         }
       );
-      const {items} = response.data
-      const playlists = items.map(({name, id}) => 
-      {return {name, id}
-    });
-    dispatch({type:reducerCases.SET_PLAYLISTS,playlists});
+      const { items } = response.data;
+      const playlists = items.map(({ name, id }) => {
+        return { name, id };
+      });
+      dispatch({ type: reducerCases.SET_PLAYLISTS, playlists });
     };
     getPlaylistData();
   }, [token, dispatch]);
+  const changeCurrentPlaylist = (selectedPlaylistId) => {
+    dispatch({ type: reducerCases.SET_PLAYLIST_ID, selectedPlaylistId });
+  };
   return (
     <Container>
-        <ul>
-            {
-                playlists.map(({name,id})=>{
-                return (
-                    <li key={id}>{name}</li>
-                )
-                }
-                )
-            }
-        </ul>
+      <ul>
+        {playlists.map(({ name, id }) => {
+          return (
+            <li key={id} onClick={() => changeCurrentPlaylist(id)}>
+              {name}
+            </li>
+          );
+        })}
+      </ul>
     </Container>
   );
 }
